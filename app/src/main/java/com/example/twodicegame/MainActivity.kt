@@ -1,6 +1,8 @@
 package com.example.twodicegame
 
 import android.content.Intent
+import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -11,6 +13,9 @@ import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private lateinit var mp:MediaPlayer
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,7 +26,15 @@ class MainActivity : AppCompatActivity() {
         var score1 = 0
         var score2 = 0
         binding.tvP.text = "Player 1"
+        mp = MediaPlayer.create(this,R.raw.dice)
         binding.btnR.setOnClickListener {
+            if(mp.isPlaying){
+                mp.seekTo(0)
+                mp.start()
+            }else{
+                mp.start()
+            }
+
             if (count <= 2) {
                 val num1 = Random.nextInt(1, 7)
                 val num2 = Random.nextInt(1, 7)
@@ -64,10 +77,13 @@ class MainActivity : AppCompatActivity() {
                     binding.tvS1.text = score1.toString()
 
 
-                } else {
+                }else {
+
                     score2 = num1 + num2
                     binding.tvS2.text = score2.toString()
+
                 }
+
                 if(count==2){
                     if (score1 > score2) {
                         binding.tvR.text = "Player 1 win "
@@ -82,18 +98,12 @@ class MainActivity : AppCompatActivity() {
                 count += 1
 
 
+
             }
         }
         binding.btnPa.setOnClickListener {
-            count = 1
-            score1 = 0
-            score2 = 0
-            binding.tvR.text = ""
-            binding.tvP.text = "Player 1"
-            binding.tvS1.text = score1.toString()
-            binding.tvS2.text = score2.toString()
-            binding.llV.visibility = View.INVISIBLE
-            binding.btnR.visibility = View.VISIBLE
+            val intent = Intent(this,MainActivity::class.java)
+         startActivity(intent)
 
 
         }
@@ -106,5 +116,6 @@ class MainActivity : AppCompatActivity() {
 
 
     }
+
 }
 
